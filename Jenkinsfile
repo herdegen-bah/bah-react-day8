@@ -1,25 +1,12 @@
 node {
     
     stage ("Checkout React Client"){
-        git branch: 'main', url: 'https://github.com/foxwas/bah-mcc-react-day8.git'
+        git branch: 'main', url: 'https://github.com/herdegen-bah/bah-react-day8.git'
     }
     
     stage ("Install dependencies - react client") {
         sh 'npm install'
     }
-    
-    stage ("Containerize the app-docker build - react client") {
-        sh 'docker build --rm -t event-reactclient:v1.0 .'
-    }
-    
-    stage ("Inspect the docker image - react client"){
-        sh "docker images event-reactclient:v1.0"
-        sh "docker inspect event-reactclient:v1.0"
-    }
-    
-    stage ("Run Docker container instance - react client"){
-        sh "docker run -d --rm --name event-reactclient -p 3000:3000 event-reactclient:v1.0"
-     }
     
     stage('User Acceptance Test - react client') {
 	
@@ -29,8 +16,7 @@ node {
 	
 	  if(response=="Yes") {
 	    stage('Deploy to Kubenetes cluster - react client') {
-		  sh "docker stop event-reactclient"
-	      sh "kubectl create deployment event-reactclient --image=event-reactclient:v1.0"
+	      sh "kubectl create deployment event-reactclient --image=settlagekl/react-day7:v1.0"
 	      sh "kubectl expose deployment event-reactclient --type=LoadBalancer --port=80"
 	    }
 	  }
