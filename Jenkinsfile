@@ -7,6 +7,10 @@ node {
     stage ("Install dependencies - react client") {
         sh 'npm install'
     }
+	stage("Delete previous env - react client"){
+		sh 'kubectl delete deployment react-day7 || true'
+		sh 'kubectl delete service react-day7 || true'
+	}
     
     stage('User Acceptance Test - react client') {
 	
@@ -15,9 +19,9 @@ node {
 	   description: '', name: 'Pass')]
 	
 	  if(response=="Yes") {
-	    stage('Deploy to Kubenetes cluster - react client') {
-	      sh "kubectl create deployment event-reactclient --image=settlagekl/react-day7:v1.0"
-	      sh "kubectl expose deployment event-reactclient --type=LoadBalancer --port=80"
+	    stage('Deploy to Kubernetes cluster - react client') {
+	      sh "kubectl create deployment react-day7 --image=settlagekl/react-day7:v1.0"
+	      sh "kubectl expose deployment react-day7 --type=LoadBalancer --port=80"
 	    }
 	  }
     }
